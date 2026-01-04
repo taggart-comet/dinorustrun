@@ -2,16 +2,12 @@ use super::{Dino, DeathCause};
 
 /// Effects that can be applied to the Dino
 pub enum Effect {
-    Damage(f32),      // Reduce health by amount
-    Heal(f32),        // Restore health by amount
-    DrainMana(f32),   // Reduce mana by amount
-    RestoreMana(f32), // Restore mana by amount
-    Kill,             // Instant death - zero health and mana
-    Eaten,            // Recover 0.1 health and 0.1 mana
+    Damage(f32),
+    Kill,
+    Eaten,
 }
 
 impl Dino {
-    /// Apply an effect to the dino
     pub fn apply_effect(&mut self, effect: Effect) {
         match effect {
             Effect::Damage(amount) => {
@@ -22,15 +18,6 @@ impl Dino {
                     self.animation_timer = 0.0;
                     self.is_ducking = false;
                 }
-            }
-            Effect::Heal(amount) => {
-                self.health = (self.health + amount).min(1.0);
-            }
-            Effect::DrainMana(amount) => {
-                self.mana = (self.mana - amount).max(0.0);
-            }
-            Effect::RestoreMana(amount) => {
-                self.mana = (self.mana + amount).min(1.0);
             }
             Effect::Kill => {
                 self.health = 0.0;
@@ -46,8 +33,6 @@ impl Dino {
                 self.health = (self.health + 0.2).min(1.0);
                 self.mana = (self.mana + 0.3).min(1.0);
                 self.has_eaten = true;
-                // If we hit something while in the first half of eating animation, 
-                // skip to the second half
                 if self.is_eating && self.current_frame < 2 {
                     self.current_frame = 2;
                     self.animation_timer = 0.0;

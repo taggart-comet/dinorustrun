@@ -2,7 +2,6 @@ use macroquad::prelude::*;
 use super::obstacle::Obstacle;
 use super::dino::Effect;
 
-// Sprite sheet configuration
 const SPRITE_COLS: usize = 2;
 const SPRITE_ROWS: usize = 2;
 const FRAME_COUNT: usize = 4;
@@ -22,6 +21,16 @@ pub struct Fly {
 }
 
 impl Fly {
+    pub async fn load_textures() -> (Texture2D, Texture2D) {
+        let texture = load_texture("assets/bird.png").await.unwrap();
+        texture.set_filter(FilterMode::Nearest);
+
+        let hit_texture = load_texture("assets/bird_hit.png").await.unwrap();
+        hit_texture.set_filter(FilterMode::Nearest);
+
+        (texture, hit_texture)
+    }
+
     pub fn new(x: f32, texture: Texture2D, hit_texture: Texture2D) -> Self {
         let height_options = [0.65, 0.55, 0.75];
         let y_percent = height_options[rand::gen_range(0, 3)];
@@ -29,7 +38,7 @@ impl Fly {
         Self {
             x_percent: x / screen_width(),
             y_percent,
-            size_percent: 0.1,  // Adjust this to change bird size
+            size_percent: 0.1,
             texture,
             hit_texture,
             is_hit: false,

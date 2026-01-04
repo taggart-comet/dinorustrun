@@ -19,6 +19,12 @@ pub struct Cloud {
 }
 
 impl Cloud {
+    pub async fn load_texture() -> Texture2D {
+        let texture = load_texture("assets/env/clouds.png").await.unwrap();
+        texture.set_filter(FilterMode::Nearest);
+        texture
+    }
+
     pub fn new(texture: Texture2D) -> Self {
         Self {
             x_percent: 1.0 + rand::gen_range(0.0, 0.2),

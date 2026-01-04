@@ -9,10 +9,16 @@ pub struct Rock {
 }
 
 impl Rock {
+    pub async fn load_texture() -> Texture2D {
+        let texture = load_texture("assets/rock.png").await.unwrap();
+        texture.set_filter(FilterMode::Nearest);
+        texture
+    }
+
     pub fn new(x: f32, texture: Texture2D) -> Self {
         Self {
             x_percent: x / screen_width(),
-            size_percent: 0.125,  // Adjust this to change rock size
+            size_percent: 0.125,
             texture,
         }
     }

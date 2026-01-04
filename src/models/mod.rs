@@ -5,7 +5,6 @@ pub mod fly;
 pub mod cloud;
 pub mod cactus;
 
-// Re-export commonly used items for convenience
 pub use dino::Dino;
 pub use dino::ground_y;
 pub use obstacle::Obstacle;

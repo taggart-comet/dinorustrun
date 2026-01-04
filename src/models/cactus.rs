@@ -2,7 +2,6 @@ use macroquad::prelude::*;
 use super::obstacle::Obstacle;
 use super::dino::{ground_y, Effect};
 
-// Hit animation sprite sheet (2x2 grid = 4 frames)
 const SPRITE_COLS: usize = 2;
 const SPRITE_ROWS: usize = 2;
 const FRAME_COUNT: usize = 4;
@@ -19,6 +18,16 @@ pub struct Cactus {
 }
 
 impl Cactus {
+    pub async fn load_textures() -> (Texture2D, Texture2D) {
+        let texture = load_texture("assets/cactus.png").await.unwrap();
+        texture.set_filter(FilterMode::Nearest);
+
+        let hit_texture = load_texture("assets/cactus_hit.png").await.unwrap();
+        hit_texture.set_filter(FilterMode::Nearest);
+
+        (texture, hit_texture)
+    }
+
     pub fn new(x: f32, texture: Texture2D, hit_texture: Texture2D) -> Self {
         Self {
             x_percent: x / screen_width(),
@@ -119,7 +128,7 @@ impl Obstacle for Cactus {
         self.x() + self.width() < 0.0
     }
 
-    fn get_collision_effect(&self, dino: &crate::models::Dino) -> Effect {
+    fn get_collision_effect(&self, _dino: &crate::models::Dino) -> Effect {
         Effect::Damage(0.15)
     }
 

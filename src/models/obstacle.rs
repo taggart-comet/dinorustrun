@@ -10,9 +10,6 @@ pub trait Obstacle {
     fn is_off_screen(&self) -> bool;
     fn get_collision_effect(&self, dino: &Dino) -> Effect;
 
-    /// Called when dino collides with this obstacle
     fn on_hit(&mut self) {}
-
-    /// Returns true if obstacle should be removed (e.g., after hit animation)
     fn should_remove(&self) -> bool { false }
 }

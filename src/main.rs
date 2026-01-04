@@ -27,19 +27,19 @@ struct Game {
     ground_displacement: f32,
     spawn_timer: f32,
     state: GameState,
-    // Shared textures for obstacles
-    bird_texture: Texture2D,
+    // Textures loaded from each model
     rock_texture: Texture2D,
-    cactus_texture: Texture2D,
-    cactus_hit_texture: Texture2D,
-    bird_hit_texture: Texture2D,
+    cactus_textures: (Texture2D, Texture2D),
+    fly_textures: (Texture2D, Texture2D),
 }
 
 impl Game {
     async fn new() -> Self {
-        // Load cloud texture first so we can pass it to clouds
-        let cloud_texture = load_texture("assets/env/clouds.png").await.unwrap();
-        cloud_texture.set_filter(FilterMode::Nearest);
+        // Load textures from each model
+        let rock_texture = Rock::load_texture().await;
+        let cactus_textures = Cactus::load_textures().await;
+        let fly_textures = Fly::load_textures().await;
+        let cloud_texture = Cloud::load_texture().await;
 
         let clouds = (0..5)
             .map(|_| {
@@ -48,22 +48,6 @@ impl Game {
                 cloud
             })
             .collect();
-
-        // Load shared textures
-        let bird_texture = load_texture("assets/bird.png").await.unwrap();
-        bird_texture.set_filter(FilterMode::Nearest);
-
-        let rock_texture = load_texture("assets/rock.png").await.unwrap();
-        rock_texture.set_filter(FilterMode::Nearest);
-
-        let cactus_texture = load_texture("assets/cactus.png").await.unwrap();
-        cactus_texture.set_filter(FilterMode::Nearest);
-
-        let cactus_hit_texture = load_texture("assets/cactus_hit.png").await.unwrap();
-        cactus_hit_texture.set_filter(FilterMode::Nearest);
-
-        let bird_hit_texture = load_texture("assets/bird_hit.png").await.unwrap();
-        bird_hit_texture.set_filter(FilterMode::Nearest);
 
         Self {
             dino: Dino::new().await,
@@ -75,11 +59,9 @@ impl Game {
             ground_displacement: 0.0,
             spawn_timer: OBSTACLE_SPAWN_TIME,
             state: GameState::Ready,
-            bird_texture,
             rock_texture,
-            cactus_texture,
-            cactus_hit_texture,
-            bird_hit_texture,
+            cactus_textures,
+            fly_textures,
         }
     }
 
@@ -98,13 +80,13 @@ impl Game {
         screen_width() * self.game_speed_percent
     }
 
-    async fn spawn_obstacle(&mut self) {
+    fn spawn_obstacle(&mut self) {
         let obstacle_type = rand::gen_range(0, 10);
         let spawn_x = screen_width() + screen_width() * 0.05;
         let obstacle: Box<dyn Obstacle> = match obstacle_type {
             0..=3 => Box::new(Rock::new(spawn_x, self.rock_texture.clone())),
-            4..=6 => Box::new(Cactus::new(spawn_x, self.cactus_texture.clone(), self.cactus_hit_texture.clone())),
-            _ => Box::new(Fly::new(spawn_x, self.bird_texture.clone(), self.bird_hit_texture.clone())),
+            4..=6 => Box::new(Cactus::new(spawn_x, self.cactus_textures.0.clone(), self.cactus_textures.1.clone())),
+            _ => Box::new(Fly::new(spawn_x, self.fly_textures.0.clone(), self.fly_textures.1.clone())),
         };
         self.obstacles.push(obstacle);
     }
@@ -176,7 +158,7 @@ impl Game {
                     if !self.dino.is_dead() {
                         self.spawn_timer -= dt;
                         if self.spawn_timer <= 0.0 {
-                            self.spawn_obstacle().await;
+                            self.spawn_obstacle();
                             let min_time = (OBSTACLE_SPAWN_TIME - self.game_speed_percent).max(0.5);
                             self.spawn_timer = rand::gen_range(min_time, min_time + 1.0);
                         }
