@@ -17,7 +17,7 @@ pub(crate) const SPRITE_ROWS: usize = 2;
 pub(crate) const FRAME_COUNT: usize = 4;
 const ANIMATION_SPEED: f32 = 0.25;
 const EATING_ANIMATION_SPEED: f32 = 0.1;
-const DOUBLE_JUMP_MANA_COST: f32 = 0.3;
+const DOUBLE_JUMP_MANA_COST: f32 = 0.05;
 
 
 impl Dino {

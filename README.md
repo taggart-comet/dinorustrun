@@ -2,6 +2,8 @@
 
 A Chrome dino-style endless runner built with Rust and macroquad.
 
+![Screenshot](assets/screenshot.png)
+
 ## Controls
 
 | Key | Action |
