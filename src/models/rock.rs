@@ -57,10 +57,11 @@ impl Obstacle for Rock {
                 ..Default::default()
             },
         );
+        // draw_rectangle(self.x()+self.width()/4.0, self.y(), self.width()/2.0, self.height()*2.0, RED)
     }
 
     fn get_hitbox(&self) -> Rect {
-        Rect::new(self.x()+self.width()/4.0, self.y(), self.width()/2.0, self.height())
+        Rect::new(self.x()+self.width()/4.0, self.y(), self.width()/2.0, self.height()*2.0)
     }
 
     fn is_off_screen(&self) -> bool {

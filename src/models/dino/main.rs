@@ -16,6 +16,7 @@ pub(crate) const SPRITE_COLS: usize = 2;
 pub(crate) const SPRITE_ROWS: usize = 2;
 pub(crate) const FRAME_COUNT: usize = 4;
 const ANIMATION_SPEED: f32 = 0.25;
+const STAND_ANIMATION_SPEED: f32 = 0.5;
 const EATING_ANIMATION_SPEED: f32 = 0.1;
 const DOUBLE_JUMP_MANA_COST: f32 = 0.05;
 
@@ -37,6 +38,7 @@ impl Dino {
         self.mana = 1.0;
         self.death_cause = None;
         self.can_double_jump = false;
+        self.is_standing = false;
     }
 
     pub fn x(&self) -> f32 {
@@ -199,7 +201,12 @@ impl Dino {
         // Update animation (both running and jumping)
         if !self.is_eating {
             self.animation_timer += dt;
-            if self.animation_timer >= ANIMATION_SPEED {
+            let speed = if self.is_standing {
+                STAND_ANIMATION_SPEED
+            } else {
+                ANIMATION_SPEED
+            };
+            if self.animation_timer >= speed {
                 self.animation_timer = 0.0;
                 self.current_frame = (self.current_frame + 1) % FRAME_COUNT;
             }

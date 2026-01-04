@@ -37,11 +37,13 @@ pub struct Dino {
     pub(crate) eating_texture: Texture2D,
     pub(crate) death_impact_texture: Texture2D,
     pub(crate) death_no_hp_texture: Texture2D,
+    pub(crate) stand_texture: Texture2D,
     // Stats
     pub(crate) health: f32,  // 0.0 - 1.0
     pub(crate) mana: f32,    // 0.0 - 1.0
     pub(crate) death_cause: Option<DeathCause>,
     pub(crate) can_double_jump: bool,
+    pub(crate) is_standing: bool,
 }
 
 impl Dino {
@@ -70,6 +72,9 @@ impl Dino {
         let death_no_hp_texture = load_texture("assets/dino/death_no_hp.png").await.unwrap();
         death_no_hp_texture.set_filter(FilterMode::Nearest);
 
+        let stand_texture = load_texture("assets/dino/stand.png").await.unwrap();
+        stand_texture.set_filter(FilterMode::Nearest);
+
         Self {
             x_percent: 0.15,
             y_percent: ground - size_percent,
@@ -90,10 +95,12 @@ impl Dino {
             eating_texture,
             death_impact_texture,
             death_no_hp_texture,
+            stand_texture,
             health: 1.0,
             mana: 1.0,
             death_cause: None,
             can_double_jump: false,
+            is_standing: true,
         }
     }
 }

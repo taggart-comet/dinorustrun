@@ -10,6 +10,7 @@ const GAME_SPEED_INCREMENT: f32 = 0.015;   // Speed increase per second
 const OBSTACLE_SPAWN_TIME: f32 = 1.5;
 
 // Game state enum
+#[derive(PartialEq)]
 enum GameState {
     Ready,
     Playing,
@@ -99,9 +100,11 @@ impl Game {
                 for cloud in &mut self.clouds {
                     cloud.update(dt);
                 }
+                self.dino.update(dt);
 
                 if is_key_pressed(KeyCode::Space) || is_key_pressed(KeyCode::Up) {
                     self.state = GameState::Playing;
+                    self.dino.is_standing = false;
                     self.dino.jump();
                 }
             }
@@ -233,7 +236,11 @@ impl Game {
         }
 
         // Draw dino
-        self.dino.draw();
+        if self.state == GameState::Ready {
+            self.dino.draw_stand();
+        } else {
+            self.dino.draw();
+        }
 
         // Draw dino stats below ground
         self.dino.draw_stats();

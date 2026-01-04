@@ -24,6 +24,34 @@ impl Dino {
         self._run();
     }
 
+    pub fn draw_stand(&self) {
+        let frame_col = self.current_frame % SPRITE_COLS;
+        let frame_row = self.current_frame / SPRITE_COLS;
+
+        let frame_width = self.stand_texture.width() / SPRITE_COLS as f32;
+        let frame_height = self.stand_texture.height() / SPRITE_ROWS as f32;
+
+        let padding = 4.0;
+        let source_rect = Rect::new(
+            frame_col as f32 * frame_width + padding,
+            frame_row as f32 * frame_height + padding - 35.0,
+            frame_width - padding * 2.0,
+            frame_height - padding * 2.0,
+        );
+
+        draw_texture_ex(
+            &self.stand_texture,
+            self.x(),
+            self.y(),
+            WHITE,
+            DrawTextureParams {
+                source: Some(source_rect),
+                dest_size: Some(Vec2::new(self.width(), self.height())),
+                ..Default::default()
+            },
+        );
+    }
+
     fn _fly(&self) {
         let scale = 2.0; // Adjust this value: 1.0 = normal, 1.2 = 20% larger, 0.8 = 20% smaller
         draw_texture_ex(
@@ -51,11 +79,12 @@ impl Dino {
         let frame_width = texture.width() / SPRITE_COLS as f32;
         let frame_height = texture.height() / SPRITE_ROWS as f32;
 
+        let padding = 1.0;
         let source_rect = Rect::new(
-            frame_col as f32 * frame_width,
-            frame_row as f32 * frame_height - 35.0,
-            frame_width + 5.0,
-            frame_height,
+            frame_col as f32 * frame_width + padding,
+            frame_row as f32 * frame_height + padding - 35.0,
+            frame_width - padding * 2.0,
+            frame_height - padding * 2.0,
         );
 
         draw_texture_ex(
@@ -78,11 +107,12 @@ impl Dino {
         let frame_width = self.eating_texture.width() / SPRITE_COLS as f32;
         let frame_height = self.eating_texture.height() / SPRITE_ROWS as f32;
 
+        let padding = 1.0;
         let source_rect = Rect::new(
-            frame_col as f32 * frame_width,
-            frame_row as f32 * frame_height - 35.0,
-            frame_width,
-            frame_height,
+            frame_col as f32 * frame_width + padding,
+            frame_row as f32 * frame_height + padding - 35.0,
+            frame_width - padding * 2.0,
+            frame_height - padding * 2.0,
         );
 
         draw_texture_ex(
@@ -105,11 +135,12 @@ impl Dino {
         let frame_width = self.run_texture.width() / SPRITE_COLS as f32;
         let frame_height = self.run_texture.height() / SPRITE_ROWS as f32;
 
+        let padding = 1.0;
         let source_rect = Rect::new(
-            frame_col as f32 * frame_width,
-            frame_row as f32 * frame_height - 35.0,
-            frame_width - 5.0,
-            frame_height,
+            frame_col as f32 * frame_width + padding,
+            frame_row as f32 * frame_height + padding - 35.0,
+            frame_width - padding * 2.0,
+            frame_height - padding * 2.0,
         );
 
         draw_texture_ex(
@@ -128,7 +159,6 @@ impl Dino {
         //     self.y() + self.height() / 1.225,
         //     self.width() / 4.0,
         // )
-        // draw debug figure for hitbox as it's circle (not rectangle)
         // draw_circle(self.x() + self.width() / 2.0, self.y() + self.height() / 1.225, self.width() / 4.0, RED);
     }
 
@@ -139,11 +169,12 @@ impl Dino {
         let frame_width = self.jump_texture.width() / SPRITE_COLS as f32;
         let frame_height = self.jump_texture.height() / SPRITE_ROWS as f32;
 
+        let padding = 1.0;
         let source_rect = Rect::new(
-            frame_col as f32 * frame_width,
-            frame_row as f32 * frame_height,
-            frame_width,
-            frame_height,
+            frame_col as f32 * frame_width + padding,
+            frame_row as f32 * frame_height + padding,
+            frame_width - padding * 2.0,
+            frame_height - padding * 2.0,
         );
 
         draw_texture_ex(
